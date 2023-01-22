@@ -9,27 +9,27 @@ const port = process.env.PORT || 9000;
 app.use(cors());
 app.use(express.json());
 app.get("/", (req, res) => {
-  res.send("hello world")
+  return res.send("hello world")
 })
 
 app.post("/user", (req, res) => {
-  console.log(req);
-  if (!req.body.email || !req.body.password || !req.body.confirmPassword || !req.body.Name || !req.body.surname || !req.body.bithday) {
-   res.status(400).json({ message: "un des champs est vide" })
+  console.log(req.body);
+  if (!req.body.email || !req.body.password || !req.body.confirmPassword || !req.body.birthday || !req.body.Name) {
+    return res.status(400).json({ message: "un des champs est vide" })
   }
 
   if (req.body.password != req.body.confirmPassword) {
-    res.status(400).json({ message: "error" })
+    return res.status(400).json({ message: "error" })
   }
 
   if (!underAgeValidate(req.body.birthday)) {
-    res.status(400).json({ message: "NO" })
+    return res.status(400).json({ message: "NO" })
   }
 
 
   const newRecord = new YourModel({ name: req.body.name, age: req.body.birthday, email: req.body.email, password: req.body.password });
   newRecord.save()
-  res.sendStatus(201)
+  return res.sendStatus(201)
 
 })
 app.listen(port, () => {
